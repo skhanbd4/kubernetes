@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: sknnh-dl-train
+  name: sknnh-dl-test
   labels:
-    app: sknnh-dl-train
+    app: sknnh-dl-test
 spec:
   enableServiceLinks: false
   terminationGracePeriodSeconds: 30
@@ -18,11 +18,11 @@ spec:
             - chi-dgx-node01.csuchico.edu
             - chi-dgx-node02.csuchico.edu
   containers:
-  - name: sknnh-dl-train
+  - name: sknnh-dl-test
     image: gitlab-registry.nrp-nautilus.io/skhan/dl_pytorch:4bd8b3be
     imagePullPolicy: IfNotPresent
     workingDir: /sknnh-dl-train
-    command: ["bash", "-lc", "jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.notebook_dir=/sknnh-dl-train"]
+    command: ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.notebook_dir=/sknnh-dl-train"] 
     env:
       - name: PIP_NO_CACHE_DIR
         value: "1"
@@ -45,12 +45,10 @@ spec:
         cpu: "2"
         memory: "12Gi"
         ephemeral-storage: "10Gi"
-        nvidia.com/gpu: 1
       limits:
         cpu: "2"
         memory: "12Gi"
         ephemeral-storage: "12Gi"
-        nvidia.com/gpu: 1
     volumeMounts:
       - name: sknnh-dl-train
         mountPath: /sknnh-dl-train

@@ -7,16 +7,6 @@ metadata:
 spec:
   enableServiceLinks: false
   terminationGracePeriodSeconds: 30
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: kubernetes.io/hostname
-            operator: NotIn
-            values:
-            - chi-dgx-node01.csuchico.edu
-            - chi-dgx-node02.csuchico.edu
   containers:
   - name: sknnh-dl-train
     image: gitlab-registry.nrp-nautilus.io/skhan/dl_pytorch:4bd8b3be

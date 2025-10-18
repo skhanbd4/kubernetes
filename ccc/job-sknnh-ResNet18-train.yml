@@ -1,0 +1,37 @@
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-sknnh-resnet18-train
+spec:
+  template:
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - name: pod-sknnh-resnet18-train
+        image: gitlab-registry.nrp-nautilus.io/skhan/dl_pytorch:4bd8b3be
+        workingDir: /data/dltrain
+        command: ["/bin/sh","-c"]
+        args: 
+        - python3 main.py --net ResNet18;
+          
+          
+        volumeMounts:
+        - name: cloudcomp-solaiman
+          mountPath: /data/dltrain
+        resources:
+            limits:
+              memory: 20Gi
+              cpu: 2
+              nvidia.com/gpu: 1
+            requests:
+              memory: 20Gi
+              cpu: 2
+              nvidia.com/gpu: 1
+      volumes:
+      - name: cloudcomp-solaiman 
+        persistentVolumeClaim:
+            claimName: cloudcomp-solaiman
+      restartPolicy: Never      
+  backoffLimit: 0
+

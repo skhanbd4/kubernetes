@@ -1,0 +1,27 @@
+ Todo
+ ------------------------
+ 1. NIW by Monday Oct 13,
+ 2. Ersoy TA Request
+ 2. Cloud course
+ 3. Conference
+ 4. Presentation slide by Friday - October 17
+ 5. Daily model, temporal encoding change
+ 6. Geo model - GPT
+ 7. If possible Ford application
+ 
+ 
+ # period_freq="Q"
+ 
+ # monthly te vule eta hoyeche in training py 
+ dropt_incomplete = Fasle
+ 
+ Need to check optimizer and loss criteria even in Resnet model
+ 
+ As rendomly split test - train dataset, does it sort data based of frequency other wise ulta palta hobe
+ 
+ 
+ 
+ 
+
+ 
+ Metrics saved to ../results6_0/result_sheets/S2S5P_quarterly_ep_91_batch_16_metrics.csv

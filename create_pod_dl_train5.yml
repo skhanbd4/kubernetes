@@ -7,22 +7,29 @@ metadata:
 spec:
   enableServiceLinks: false
   terminationGracePeriodSeconds: 30
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: kubernetes.io/hostname
-            operator: NotIn
-            values:
-            - chi-dgx-node01.csuchico.edu
-            - chi-dgx-node02.csuchico.edu
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+  initContainers:
+  - name: fix-perms
+    image: busybox:1.36
+    command: ["sh", "-lc", "chown -R 1000:1000 /sknnh-dl-train || true; chmod -R g+rwX /sknnh-dl-train || true"]
+    volumeMounts:
+      - name: sknnh-dl-train
+        mountPath: /sknnh-dl-train
   containers:
   - name: sknnh-dl-train
     image: gitlab-registry.nrp-nautilus.io/skhan/dl_pytorch:4bd8b3be
     imagePullPolicy: IfNotPresent
     workingDir: /sknnh-dl-train
-    command: ["bash", "-lc", "jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.notebook_dir=/sknnh-dl-train"]
+    ports:
+      - containerPort: 8888
+        name: http
+        protocol: TCP
+    # Use JupyterLab and ServerApp flags (newer Jupyter). Non-root so no --allow-root needed.
+    command: ["bash", "-lc", "exec jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --ServerApp.token='' --ServerApp.password='' --ServerApp.allow_origin='*' --ServerApp.root_dir=/sknnh-dl-train"]
     env:
       - name: PIP_NO_CACHE_DIR
         value: "1"
